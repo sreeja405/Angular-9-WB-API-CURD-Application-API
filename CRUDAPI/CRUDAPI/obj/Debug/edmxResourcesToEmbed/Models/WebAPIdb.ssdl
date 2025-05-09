@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebApiDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Active" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmployeeName" Type="varchar" MaxLength="150" />
+    <Property Name="DepartmentID" Type="int" />
+    <Property Name="RecordStatusID" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'WebApiDb.dbo.RecordStatus' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="RecordStatus">
+    <Key>
+      <PropertyRef Name="RecordStatusID" />
+    </Key>
+    <Property Name="RecordStatusID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecordStatusName" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'WebApiDb.dbo.viewEmployeeDetails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="viewEmployeeDetails">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="DepartmentName" />
+      <PropertyRef Name="RecordStatusID" />
+    </Key>
+    <Property Name="EmployeeID" Type="int" Nullable="false" />
+    <Property Name="EmployeeName" Type="varchar" MaxLength="150" />
+    <Property Name="DepartmentID" Type="int" />
+    <Property Name="DepartmentName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="RecordStatusID" Type="int" Nullable="false" />
+    <Property Name="RecordStatusName" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <Association Name="FK__Employee__Depart__398D8EEE">
+    <End Role="Department" Type="Self.Department" Multiplicity="0..1" />
+    <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="WebApiDbModelStoreContainer">
+    <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="RecordStatus" EntityType="Self.RecordStatus" store:Type="Tables" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [RecordStatus].[RecordStatusID] AS [RecordStatusID], 
+    [RecordStatus].[RecordStatusName] AS [RecordStatusName]
+    FROM [dbo].[RecordStatus] AS [RecordStatus]</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="viewEmployeeDetails" EntityType="Self.viewEmployeeDetails" store:Type="Views" store:Schema="dbo">
+      <DefiningQuery>SELECT 
+    [viewEmployeeDetails].[EmployeeID] AS [EmployeeID], 
+    [viewEmployeeDetails].[EmployeeName] AS [EmployeeName], 
+    [viewEmployeeDetails].[DepartmentID] AS [DepartmentID], 
+    [viewEmployeeDetails].[DepartmentName] AS [DepartmentName], 
+    [viewEmployeeDetails].[RecordStatusID] AS [RecordStatusID], 
+    [viewEmployeeDetails].[RecordStatusName] AS [RecordStatusName]
+    FROM [dbo].[viewEmployeeDetails] AS [viewEmployeeDetails]</DefiningQuery>
+    </EntitySet>
+    <AssociationSet Name="FK__Employee__Depart__398D8EEE" Association="Self.FK__Employee__Depart__398D8EEE">
+      <End Role="Department" EntitySet="Department" />
+      <End Role="Employee" EntitySet="Employee" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

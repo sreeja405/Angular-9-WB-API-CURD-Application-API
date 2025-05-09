@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="WebApiDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="WebApiDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Departments" EntityType="WebApiDbModel.Department" />
+    <EntitySet Name="Employees" EntityType="WebApiDbModel.Employee" />
+    <EntitySet Name="RecordStatus" EntityType="WebApiDbModel.RecordStatu" />
+    <EntitySet Name="viewEmployeeDetails" EntityType="WebApiDbModel.viewEmployeeDetail" />
+    <AssociationSet Name="FK__Employee__Depart__398D8EEE" Association="WebApiDbModel.FK__Employee__Depart__398D8EEE">
+      <End Role="Department" EntitySet="Departments" />
+      <End Role="Employee" EntitySet="Employees" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Department">
+    <Key>
+      <PropertyRef Name="DepartmentID" />
+    </Key>
+    <Property Name="DepartmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Employees" Relationship="WebApiDbModel.FK__Employee__Depart__398D8EEE" FromRole="Department" ToRole="Employee" />
+  </EntityType>
+  <EntityType Name="Employee">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <Property Name="RecordStatusID" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Department" Relationship="WebApiDbModel.FK__Employee__Depart__398D8EEE" FromRole="Employee" ToRole="Department" />
+  </EntityType>
+  <EntityType Name="RecordStatu">
+    <Key>
+      <PropertyRef Name="RecordStatusID" />
+    </Key>
+    <Property Name="RecordStatusID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="RecordStatusName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="viewEmployeeDetail">
+    <Key>
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="DepartmentName" />
+      <PropertyRef Name="RecordStatusID" />
+    </Key>
+    <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+    <Property Name="EmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <Property Name="DepartmentName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="RecordStatusID" Type="Int32" Nullable="false" />
+    <Property Name="RecordStatusName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK__Employee__Depart__398D8EEE">
+    <End Type="WebApiDbModel.Department" Role="Department" Multiplicity="0..1" />
+    <End Type="WebApiDbModel.Employee" Role="Employee" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Department">
+        <PropertyRef Name="DepartmentID" />
+      </Principal>
+      <Dependent Role="Employee">
+        <PropertyRef Name="DepartmentID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
